@@ -1,0 +1,13 @@
+restLocations:
+  - '0,60,0'
+  - '0,60,0'
+  - '0,60,0'
+  - '0,60,0'
+  - '0,60,0'
+  - '0,60,0'
+bossLocation: '1,60,1'
+# Kits are written ITEM;AMOUNT;SLOT
+bossKit:
+  - 'DIAMOND_AXE;1;1'
+restKit:
+  - 'DIAMOND_SHOVEL;1;1'

@@ -1,0 +1,8 @@
+restPlayers: 6
+# not implemented yet
+bossPlayers: 1
+# GameDuration in seconds
+gameDuration: 120
+LobbyWorld: 'lobby'
+spawnLocation: '2,80,2'
+GameWorld: 'arena'
