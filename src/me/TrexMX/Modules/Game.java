@@ -10,15 +10,14 @@ public class Game {
 	
 
 	private static GameState state;
+        private static Player[] winners,losers;
+        
 	
 	@SuppressWarnings("deprecation")
 	public void startGame() {
 		
-		
-		
-		Bukkit.getScheduler().runTask(Main.getPlugin(Main.class), new BukkitRunnable() {
+		new BukkitRunnable() {
 			int count=10;
-
 			@Override
 			public void run() {
 				if (count>0 ) {
@@ -37,31 +36,30 @@ public class Game {
 				}
 
 			}
-		});
+		}.runTaskLater(Main.getPlugin(Main.class), 20);
 		
-
-		
-		Bukkit.getScheduler().runTask(Main.getPlugin(Main.class), new BukkitRunnable() {
+		new BukkitRunnable() {
 			int count=ConfigInfo.getGameDuration();
 
 			@Override
 			public void run() {
-				if (count>0 ) {
-					
-					count--;
-				} else {
-					cancel();
+				if (count>0) {
+                                    // to-do counter playing
+                                    count--;
+                                }
+				if (count<=0 || state.equals(GameState.ENDED)) {
+                                    cancel();
 				}
 
 			}
-		});
+		}.runTaskLater(Main.getPlugin(Main.class), 20);
 		
 	}
 	
 	@SuppressWarnings("deprecation")
 	public void startCountdownToStart() {
 		state = GameState.STARTING;
-		Bukkit.getScheduler().runTask(Main.getPlugin(Main.class), new BukkitRunnable() {
+		new BukkitRunnable() {
 			int count=10;
 			
 			@Override
@@ -83,13 +81,12 @@ public class Game {
 					cancel();
 				}
 			}
-		});
+		}.runTaskLater(Main.getPlugin(Main.class), 20);
 		
 		
 	}
 	
 	private void teleportPlayers() {
-		
 		String[] bossCords = ArenaInfo.getBossLocation().split(","); 
 		Players.getBossPlayer().teleport(new Location(WorldModule.getGameWorld(),Double.parseDouble(bossCords[0]),Double.parseDouble(bossCords[1]),Double.parseDouble(bossCords[2])));
 		for (String loc : ArenaInfo.getRestPlayersLocations()) {
@@ -98,8 +95,6 @@ public class Game {
 				p.teleport(new Location(WorldModule.getGameWorld(),Double.parseDouble(restCords[0]),Double.parseDouble(restCords[1]),Double.parseDouble(restCords[2])));
 			}
 		}
-		
-		
 	}
 	
 	private void giveKits() {
@@ -113,9 +108,34 @@ public class Game {
 
 	public static void endGame() {
 		state  = GameState.ENDED;
-		
+                for (Player p : winners) {
+                    p.sendMessage(LangInfo.win_message);
+                    Sounds.playWin(p);
+                }
+                for (Player p : losers) {
+                    p.sendMessage(LangInfo.lose_message);
+                    Sounds.playLose(p);
+                }
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    p.sendTitle(LangInfo.winner_broadcast, "MCMéxico 2018");
+                }
 	}
+        
+        public static void setWinners(Player[] p){
+                winners = p;
+        }
+        
+        public static void setLosers(Player[] p){
+                losers = p;
+        }
+        
+        public static Player[] getWinners() {
+            return winners;
+        }
 	
+        public static Player[] getLosers() {
+            return losers;
+        }
 	public static GameState getGameState() {
 		return state;
 	}

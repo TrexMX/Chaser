@@ -11,7 +11,11 @@ public class LangInfo {
 	start_message,
 	notenoughplayers,
 	teleportcountdown_message,
-	teleported_message;
+	teleported_message,
+        gamefinished_message,
+        win_message,
+        lose_message,
+        winner_broadcast;
 
 	
 	public static void getMessages() {
@@ -22,6 +26,9 @@ public class LangInfo {
 		notenoughplayers = LoadConfig.getLangConfig().getString("notenoughplayers");
 		teleportcountdown_message = LoadConfig.getLangConfig().getString("teleportcountdown_message");
 		teleported_message = LoadConfig.getLangConfig().getString("teleported_message");
+                win_message =  LoadConfig.getLangConfig().getString("win_message");
+                lose_message = LoadConfig.getLangConfig().getString("lose_message");
+                winner_broadcast =  LoadConfig.getLangConfig().getString("winner_broadcast");
 		Main.getInstance().getLogger().info("Language config loaded");
 	}
 	

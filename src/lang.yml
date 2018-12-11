@@ -1,7 +1,8 @@
-# %p% = player_name
-# %cp% = currentplayers
-# %max% = maxplayers
+# %p% = player name
+# %cp% = current players
+# %max% = max players
 # %count% = countdown
+# %team% = 
 join_message: '%p% se ha unido (%cp%/%max%)'
 left_message: '%p% ha salido (%cp%/%max%)'
 teleportcountdown_message: 'Seras teletransportado en %count%'
@@ -9,3 +10,6 @@ teleported_message: 'Teletransportando...'
 countdown_message: 'El juego iniciara en %count%'
 notenoughplayers: 'No hay suficientes jugadores'
 start_message: 'Juego iniciado!'
+win_message: 'Perdiste. Suerte para la siguiente'
+lose_message: 'Ganaste. Felicidades!'
+winner_broadcast: 'El ganador es %team%'
