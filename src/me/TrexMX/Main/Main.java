@@ -9,6 +9,7 @@ import me.TrexMX.Modules.ConfigInfo;
 import me.TrexMX.Modules.KitModule;
 import me.TrexMX.Modules.LangInfo;
 import me.TrexMX.Modules.LoadConfig;
+import me.TrexMX.Modules.PotionEffectModule;
 import me.TrexMX.Modules.WorldModule;
 
 public class Main extends JavaPlugin{
@@ -23,9 +24,10 @@ public class Main extends JavaPlugin{
 		ConfigInfo.loadServerInfo();
 		LangInfo.getMessages();
 		ArenaInfo.loadArenaInfo();
-		//WorldModule.copyWorlds();
-		//WorldModule.loadWorlds();
+                PotionEffectModule.loadEffects();
 		KitModule.loadKits();
+		WorldModule.copyWorlds();
+		WorldModule.loadWorlds();
 		this.getCommand("/chaser").setExecutor(new ChaserCommand());
 		this.getServer().getPluginManager().registerEvents(events, this);
 

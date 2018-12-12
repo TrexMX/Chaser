@@ -6,7 +6,10 @@ import me.TrexMX.Main.Main;
 
 public class ArenaInfo {
 	
-	private static String[] RestPlayerLocations,RestPlayersKit,BossPlayerKit;
+	private static String[] RestPlayerLocations,
+                RestPlayersKit,
+                BossPlayerKit,
+                BossEffects;
 	private static String BossPlayerLocation;
 	
 	public static void loadArenaInfo() {
@@ -14,6 +17,7 @@ public class ArenaInfo {
 		loadRestLocations();
 		loadBossKit();
 		loadBossLocation();
+                loadBossEffects();
 	}
 	
 	private static void loadRestLocations() {
@@ -48,6 +52,16 @@ public class ArenaInfo {
 		}
 	}
 	
+	private static void loadBossEffects() {
+
+		List<String> BossEffectsList = LoadConfig.getArenaConfig().getStringList("bossEffects");
+		int max= BossEffectsList.size();
+		BossEffects = new String[max];
+		for (int x=0; x<max;x++) {
+			BossEffects[x] = BossEffectsList.get(x);
+		}
+	}
+	
 	public static String[] getRestPlayersLocations() {
 		return RestPlayerLocations;
 	}
@@ -63,4 +77,8 @@ public class ArenaInfo {
 	public static String getBossLocation() {
 		return BossPlayerLocation;
 	}
+
+    public static String[] getBossEffects() {
+        return BossEffects;
+    }
 }

@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.TrexMX.Main.Main;
+import org.bukkit.potion.PotionEffect;
 public class Game {
 	
 
@@ -32,6 +33,7 @@ public class Game {
 					Bukkit.broadcastMessage(LangInfo.start_message);
 					state = GameState.PLAYING;
 					giveKits();
+                                        setEffects();
 					cancel();
 				}
 
@@ -106,6 +108,11 @@ public class Game {
 		}
 	}
 
+        private void setEffects() {
+           for (PotionEffect effect : PotionEffectModule.getBossPotionEffects()) {
+               Players.getBossPlayer().addPotionEffect(effect);
+           }
+        }
 	public static void endGame() {
 		state  = GameState.ENDED;
                 for (Player p : winners) {
