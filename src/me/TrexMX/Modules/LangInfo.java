@@ -15,7 +15,9 @@ public class LangInfo {
         gamefinished_message,
         win_message,
         lose_message,
-        winner_broadcast;
+        winner_broadcast,
+        bossbar_message,
+        serverrestart_message;
 
 	
 	public static void getMessages() {
@@ -29,6 +31,8 @@ public class LangInfo {
                 win_message =  LoadConfig.getLangConfig().getString("win_message");
                 lose_message = LoadConfig.getLangConfig().getString("lose_message");
                 winner_broadcast =  LoadConfig.getLangConfig().getString("winner_broadcast");
+                bossbar_message =  LoadConfig.getLangConfig().getString("bossbar_message");
+                serverrestart_message = LoadConfig.getLangConfig().getString("serverwillrestart_message");
 		Main.getInstance().getLogger().info("Language config loaded");
 	}
 	

@@ -21,7 +21,7 @@ public class Players {
 			}
 		}
             RestTeam.setPlayers(restPlayers);
-            Main.getInstance().getLogger().info("Players set.");
+            Main.getInstance().getLogger().info("Players set on teams.");
 	}
 	
 }

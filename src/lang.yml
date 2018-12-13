@@ -1,8 +1,3 @@
-# %p% = player name
-# %cp% = current players
-# %max% = max players
-# %count% = countdown
-# %team% = 
 join_message: '%p% se ha unido (%cp%/%max%)'
 left_message: '%p% ha salido (%cp%/%max%)'
 teleportcountdown_message: 'Seras teletransportado en %count%'
@@ -13,3 +8,5 @@ start_message: 'Juego iniciado!'
 win_message: 'Perdiste. Suerte para la siguiente'
 lose_message: 'Ganaste. Felicidades!'
 winner_broadcast: 'El ganador es %team%'
+bossbar_message: '%t% segundos restantes!'
+serverwillrestart_message: 'El servidor se va a reiniciar en 10 segundos'

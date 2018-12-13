@@ -8,13 +8,15 @@ import org.bukkit.scheduler.BukkitRunnable;
 import me.TrexMX.Main.Main;
 import me.TrexMX.Teams.BossTeam;
 import me.TrexMX.Teams.RestTeam;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarFlag;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.potion.PotionEffect;
 public class Game {
 	
 
-	private static GameState state;
-        private static Player[] winners,losers;
-        
+	private static GameState state;        
 	
 	@SuppressWarnings("deprecation")
 	public void startGame() {
@@ -44,14 +46,27 @@ public class Game {
 		
 		new BukkitRunnable() {
 			int count=ConfigInfo.getGameDuration();
-
+                        BossBar bar = Bukkit.getServer().createBossBar(LangInfo.bossbar_message.replace("%t%", String.valueOf(count)),
+                                BarColor.BLUE, BarStyle.SOLID, BarFlag.DARKEN_SKY);
+                        double divpersecond = 1/ConfigInfo.getGameDuration();
 			@Override
 			public void run() {
 				if (count>0) {
-                                    // to-do counter playing
+                                    bar.setTitle(LangInfo.bossbar_message.replace("%t%", String.valueOf(count)));
+                                    bar.setProgress(divpersecond * count);
                                     count--;
                                 }
-				if (count<=0 || state.equals(GameState.ENDED)) {
+				if (count<=0) {
+                                    BossTeam.setWinners(true);
+                                    RestTeam.setWinners(false);
+                                    bar.setTitle(LangInfo.winner_broadcast.replace("%team%", BossTeam.getTeamName()));
+                                    bar.setProgress(1);
+                                    endGame();
+                                    cancel();
+                                }
+                                if (count > 0 && state.equals(GameState.ENDED)) {
+                                    bar.setTitle(LangInfo.winner_broadcast.replace("%team%", RestTeam.getTeamName()));
+                                    bar.setProgress(1);
                                     cancel();
 				}
 
@@ -91,13 +106,15 @@ public class Game {
 	
 	private void teleportPlayers() {
 		String[] bossCords = ArenaInfo.getBossLocation().split(","); 
-		 BossTeam.getBossPlayer().teleport(new Location(WorldModule.getGameWorld(),Double.parseDouble(bossCords[0]),Double.parseDouble(bossCords[1]),Double.parseDouble(bossCords[2])));
-		for (String loc : ArenaInfo.getRestPlayersLocations()) {
-			String[] restCords = loc.split(",");
-			for (Player p : RestTeam.getPlayers()) {
-				p.teleport(new Location(WorldModule.getGameWorld(),Double.parseDouble(restCords[0]),Double.parseDouble(restCords[1]),Double.parseDouble(restCords[2])));
-			}
-		}
+		BossTeam.getBossPlayer().teleport(new Location(WorldModule.getGameWorld(),Double.parseDouble(bossCords[0]),Double.parseDouble(bossCords[1]),Double.parseDouble(bossCords[2])));
+                for (Player p : RestTeam.getPlayers()) {
+                    int index = 0;
+                    String loc = ArenaInfo.getRestPlayersLocations()[index];
+                    String[] restCords = loc.split(",");
+                    p.teleport(new Location(WorldModule.getGameWorld(),Double.parseDouble(restCords[0]),Double.parseDouble(restCords[1]),Double.parseDouble(restCords[2])));
+                    index++;
+                }
+                 
 	}
 	
 	private void giveKits() {
@@ -116,34 +133,47 @@ public class Game {
         }
 	public static void endGame() {
 		state  = GameState.ENDED;
-                for (Player p : winners) {
+                if (BossTeam.isWinner()){
+                    Player p = BossTeam.getBossPlayer();
                     p.sendMessage(LangInfo.win_message);
                     Sounds.playWin(p);
-                }
-                for (Player p : losers) {
+                } else {
+                    Player p = BossTeam.getBossPlayer();
                     p.sendMessage(LangInfo.lose_message);
                     Sounds.playLose(p);
                 }
+                if (RestTeam.isWinner()) {
+                    for (Player p : RestTeam.getPlayers()) {
+                        p.sendMessage(LangInfo.win_message);
+                        Sounds.playWin(p);
+                    }
+                } else {
+                    for (Player p : RestTeam.getPlayers()) {
+                        p.sendMessage(LangInfo.lose_message);
+                        Sounds.playLose(p);
+                    }
+                }
+                
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     p.sendTitle(LangInfo.winner_broadcast, "MCMéxico 2018",10,70,20);
+                    p.sendMessage(LangInfo.serverrestart_message);
                 }
+                new BukkitRunnable() {
+                    int count = 10;
+                    @Override                    
+                    public void run() {
+                        count--;
+                        if (count==0) {
+                            Bukkit.getServer().shutdown();
+                            Bukkit.broadcastMessage("Bye bye, losers!");
+                        }
+                    }
+                }.runTaskLater(Main.getPlugin(Main.class), 20);
+                
 	}
         
-        public static void setWinners(Player[] p){
-                winners = p;
-        }
         
-        public static void setLosers(Player[] p){
-                losers = p;
-        }
-        
-        public static Player[] getWinners() {
-            return winners;
-        }
-	
-        public static Player[] getLosers() {
-            return losers;
-        }
+
 	public static GameState getGameState() {
 		return state;
 	}

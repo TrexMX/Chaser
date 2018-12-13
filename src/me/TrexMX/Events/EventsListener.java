@@ -22,20 +22,20 @@ public class EventsListener implements Listener {
 	
 	@EventHandler
 	public void serverPing(ServerListPingEvent e) {
-		e.setMotd(Game.getGameState().toString());
-		e.setMaxPlayers(ConfigInfo.getMaxPlayers());
+            e.setMotd(Game.getGameState().toString());
+            e.setMaxPlayers(ConfigInfo.getMaxPlayers());
 	}
 	
 	
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
-		Player player = e.getPlayer();
-		if (Game.getGameState() == GameState.STARTING && player.hasPermission("*")) {
-			player.kickPlayer(Game.getGameState().toString());
-		}
-		String variables[] = {"%p%","%cp%","%max%"};
-		String replace[] = {player.getName(),String.valueOf(Bukkit.getOnlinePlayers().size()),String.valueOf(ConfigInfo.getMaxPlayers())};
-		Bukkit.broadcastMessage(LangInfo.replaceVariables(LangInfo.join_message, variables, replace));
+            Player player = e.getPlayer();
+            if (Game.getGameState() == GameState.STARTING && player.hasPermission("*")) {
+                    player.kickPlayer(Game.getGameState().toString());
+            }
+            String variables[] = {"%p%","%cp%","%max%"};
+            String replace[] = {player.getName(),String.valueOf(Bukkit.getOnlinePlayers().size()),String.valueOf(ConfigInfo.getMaxPlayers())};
+            Bukkit.broadcastMessage(LangInfo.replaceVariables(LangInfo.join_message, variables, replace));
 		
 		
 
@@ -43,29 +43,26 @@ public class EventsListener implements Listener {
 	
 	@EventHandler
 	public void onQuit(PlayerQuitEvent e) {
-		Player player = e.getPlayer();
-		String variables[] = {"%p%","%cp%","%max%"};
-		String replace[] = {player.getName(),String.valueOf(Bukkit.getOnlinePlayers().size()),String.valueOf(ConfigInfo.getMaxPlayers())};
-		Bukkit.broadcastMessage(LangInfo.replaceVariables(LangInfo.left_message, variables, replace));
+            Player player = e.getPlayer();
+            String variables[] = {"%p%","%cp%","%max%"};
+            String replace[] = {player.getName(),String.valueOf(Bukkit.getOnlinePlayers().size()),String.valueOf(ConfigInfo.getMaxPlayers())};
+            Bukkit.broadcastMessage(LangInfo.replaceVariables(LangInfo.left_message, variables, replace));
 		
 	}
 
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent e) {
-		Player deadPlayer = e.getEntity();
-		if (deadPlayer.equals(BossTeam.getBossPlayer())) {
-			BossPlayerDeath event = new BossPlayerDeath(deadPlayer, deadPlayer.getKiller());
-			Bukkit.getServer().getPluginManager().callEvent(event);
-		}
+            Player deadPlayer = e.getEntity();
+            if (deadPlayer.equals(BossTeam.getBossPlayer())) {
+                    BossPlayerDeath event = new BossPlayerDeath(deadPlayer, deadPlayer.getKiller());
+                    Bukkit.getServer().getPluginManager().callEvent(event);
+            }
 	}
 	
 	@EventHandler
 	public void onBossDeath(BossPlayerDeath e) {
-		Sounds.playLose(e.getBoss());
-		for (Player p : RestTeam.getPlayers()) {
-			Sounds.playWin(p);
-		}
-		
-		Game.endGame();
+            RestTeam.setWinners(true);
+            BossTeam.setWinners(false);
+            Game.endGame();
 	}
 }

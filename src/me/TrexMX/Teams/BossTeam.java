@@ -10,6 +10,7 @@ public class BossTeam {
     private static String name;
     private static Inventory kit;
     private static PotionEffect[] BossEffects;
+    private static boolean winners;
 
     
     public static void setBossPlayer(Player p) {
@@ -20,6 +21,11 @@ public class BossTeam {
         BossTeam.name = name;
     }
 
+    public static void setWinners(Boolean trueorfalse) {
+        winners = trueorfalse;
+    }
+
+        
     public static void setKit(Inventory kit) {
         BossTeam.kit = kit;
     }
@@ -39,6 +45,10 @@ public class BossTeam {
     public static Inventory getTeamKit() {
         return kit;
     }
+    
+    public static boolean isWinner() {
+        return winners;
+    } 
     
     public static PotionEffect[] getBossEffects() {
         return BossEffects;

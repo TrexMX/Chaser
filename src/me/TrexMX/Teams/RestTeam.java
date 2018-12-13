@@ -6,9 +6,10 @@ import org.bukkit.inventory.Inventory;
 
 public class RestTeam {
     
-    static ArrayList<Player> players;
-    static String name;
-    static Inventory kit;
+    private static ArrayList<Player> players;
+    private static String name;
+    private static Inventory kit;
+    private static boolean winners;
     
     public static void setPlayers(ArrayList<Player> ps) {
        players = ps;
@@ -16,6 +17,10 @@ public class RestTeam {
     
     public static void setName(String name) {
         RestTeam.name = name;
+    }
+    
+    public static void setWinners(Boolean trueorfalse) {
+        winners = trueorfalse;
     }
 
     public static void setKit(Inventory kit) {
@@ -29,6 +34,10 @@ public class RestTeam {
     public static String getTeamName() {
         return name;
     }
+    
+    public static boolean isWinner() {
+        return winners;
+    } 
     
     public static Inventory getTeamKit() {
         return kit;
