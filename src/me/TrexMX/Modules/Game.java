@@ -6,6 +6,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.TrexMX.Main.Main;
+import me.TrexMX.Teams.BossTeam;
+import me.TrexMX.Teams.RestTeam;
 import org.bukkit.potion.PotionEffect;
 public class Game {
 	
@@ -25,7 +27,7 @@ public class Game {
 					Bukkit.broadcastMessage(LangInfo.countdown_message.replaceAll("%count%",String.valueOf(count)));
 					count--;
 				} else {
-					Players.setPlayers();
+					new Players();
 					teleportPlayers();
 					for(Player p : Bukkit.getOnlinePlayers()) {
 						p.sendMessage(LangInfo.teleported_message);
@@ -73,8 +75,7 @@ public class Game {
 				}
 				if (count<=0 && Bukkit.getOnlinePlayers().size()>=ConfigInfo.getMaxPlayers()) {
 					
-					startGame();
-					
+                                        startGame();
 					cancel();
 				}
 				if (Bukkit.getOnlinePlayers().size()<ConfigInfo.getMaxPlayers()) {
@@ -90,27 +91,27 @@ public class Game {
 	
 	private void teleportPlayers() {
 		String[] bossCords = ArenaInfo.getBossLocation().split(","); 
-		Players.getBossPlayer().teleport(new Location(WorldModule.getGameWorld(),Double.parseDouble(bossCords[0]),Double.parseDouble(bossCords[1]),Double.parseDouble(bossCords[2])));
+		 BossTeam.getBossPlayer().teleport(new Location(WorldModule.getGameWorld(),Double.parseDouble(bossCords[0]),Double.parseDouble(bossCords[1]),Double.parseDouble(bossCords[2])));
 		for (String loc : ArenaInfo.getRestPlayersLocations()) {
 			String[] restCords = loc.split(",");
-			for (Player p : Players.getRestPlayers()) {
+			for (Player p : RestTeam.getPlayers()) {
 				p.teleport(new Location(WorldModule.getGameWorld(),Double.parseDouble(restCords[0]),Double.parseDouble(restCords[1]),Double.parseDouble(restCords[2])));
 			}
 		}
 	}
 	
 	private void giveKits() {
-		Players.getBossPlayer().getInventory().clear();
-		Players.getBossPlayer().getInventory().setContents(KitModule.getBossKit().getContents());
-		for (Player p : Players.getRestPlayers()) {
+		 BossTeam.getBossPlayer().getInventory().clear();
+		 BossTeam.getBossPlayer().getInventory().setContents(BossTeam.getTeamKit().getContents());
+		for (Player p : RestTeam.getPlayers()) {
 			p.getInventory().clear();
-			p.getInventory().setContents(KitModule.getRestKit().getContents());
+			p.getInventory().setContents(RestTeam.getTeamKit().getContents());
 		}
 	}
 
         private void setEffects() {
-           for (PotionEffect effect : PotionEffectModule.getBossPotionEffects()) {
-               Players.getBossPlayer().addPotionEffect(effect);
+           for (PotionEffect effect : BossTeam.getBossEffects()) {
+               BossTeam.getBossPlayer().addPotionEffect(effect);
            }
         }
 	public static void endGame() {
@@ -124,7 +125,7 @@ public class Game {
                     Sounds.playLose(p);
                 }
                 for (Player p : Bukkit.getOnlinePlayers()) {
-                    p.sendTitle(LangInfo.winner_broadcast, "MCMéxico 2018");
+                    p.sendTitle(LangInfo.winner_broadcast, "MCMéxico 2018",10,70,20);
                 }
 	}
         

@@ -6,7 +6,7 @@ public class ConfigInfo {
 
 	
 	//private static String MOTD;
-	private static String gameWorldName,lobbyWorldName,spawnLocation;
+	private static String gameWorldName,lobbyWorldName,spawnLocation,bossTeamName, restTeamName;
 	private static int maxPlayers;
 	private static int gameDuration;
 	
@@ -18,6 +18,8 @@ public class ConfigInfo {
 		lobbyWorldName = LoadConfig.getConfig().getString("LobbyWorld");
 		spawnLocation = LoadConfig.getConfig().getString("spawnLocation");
 		gameDuration = LoadConfig.getConfig().getInt("gameDuration");
+                bossTeamName = LoadConfig.getConfig().getString("BossTeamName");
+                restTeamName = LoadConfig.getConfig().getString("RestPlayersTeamName");
 		Main.getInstance().getLogger().info("Server config loaded");
 	}
 	
@@ -35,10 +37,20 @@ public class ConfigInfo {
 	public static String getGameWorldName() {
 		return gameWorldName;
 	}
+        
 	public static String getLobbyWorldName() {
 		return lobbyWorldName;
 	}
+        
 	public static String getSpawnLocation() {
 		return spawnLocation;
 	}
+        
+        public static String getBossTeamName() {
+            return bossTeamName;
+        }
+        
+        public static String getRestTeamName() {
+            return restTeamName;
+        }
 }

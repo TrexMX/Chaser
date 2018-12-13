@@ -1,6 +1,7 @@
 package me.TrexMX.Modules;
 
 import me.TrexMX.Main.Main;
+import me.TrexMX.Teams.BossTeam;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -18,10 +19,8 @@ public class PotionEffectModule {
                     Integer.parseInt(effect[2]));
             index++;    
         }
+        BossTeam.setBossEffects(BossEffects);
         Main.getInstance().getLogger().info("Potion Effect Loaded");
     }
     
-    public static PotionEffect[] getBossPotionEffects() {
-        return BossEffects;
-    }
 }

@@ -3,13 +3,13 @@ package me.TrexMX.Modules;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import me.TrexMX.Main.Main;
+import me.TrexMX.Teams.BossTeam;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryType;
 
 
 public class KitModule {
 
-	private static Inventory RestKitInventory, BossKitInventory;
 	
 	public static void loadKits() {
 		loadRestKit();
@@ -29,10 +29,12 @@ public class KitModule {
 			int slot = Integer.parseInt(duo[2]);
 			Material material = Material.valueOf(name);
 			item = new ItemStack(material, amount);
-			RestKitInventory = Main.getInstance().getServer().createInventory(null, InventoryType.PLAYER);
+			Inventory RestKitInventory = Main.getInstance().getServer().createInventory(null, InventoryType.PLAYER);
 			RestKitInventory.setItem(slot, item);
+                        
+                        
 		}
-		Main.getInstance().getLogger().info("Kit 1 loaded");
+		Main.getInstance().getLogger().info("Kit for RestTeam laoded");
 	}
 	
 	private static void loadBossKit() {
@@ -44,17 +46,11 @@ public class KitModule {
 			int amount = Integer.parseInt(duo[1]);
 			int slot = Integer.parseInt(duo[2]);
 			item = new ItemStack(Material.getMaterial(name,false), amount);
-			BossKitInventory = Main.getInstance().getServer().createInventory(null, InventoryType.PLAYER);
+			Inventory BossKitInventory = Main.getInstance().getServer().createInventory(null, InventoryType.PLAYER);
 			BossKitInventory.setItem(slot, item);
+                        BossTeam.setKit(BossKitInventory);
 		}
-		Main.getInstance().getLogger().info("Kit 2 loaded");
+		Main.getInstance().getLogger().info("Kit for BossTeam loaded");
 	}
 	
-	public static Inventory getRestKit() {
-		return RestKitInventory;
-	}
-	
-	public static Inventory getBossKit() {
-		return BossKitInventory;
-	}
 }

@@ -11,6 +11,8 @@ import me.TrexMX.Modules.LangInfo;
 import me.TrexMX.Modules.LoadConfig;
 import me.TrexMX.Modules.PotionEffectModule;
 import me.TrexMX.Modules.WorldModule;
+import me.TrexMX.Teams.BossTeam;
+import me.TrexMX.Teams.RestTeam;
 
 public class Main extends JavaPlugin{
 
@@ -28,6 +30,8 @@ public class Main extends JavaPlugin{
 		KitModule.loadKits();
 		WorldModule.copyWorlds();
 		WorldModule.loadWorlds();
+                BossTeam.setName(ConfigInfo.getBossTeamName());
+                RestTeam.setName(ConfigInfo.getRestTeamName());
 		this.getCommand("/chaser").setExecutor(new ChaserCommand());
 		this.getServer().getPluginManager().registerEvents(events, this);
 
@@ -36,7 +40,7 @@ public class Main extends JavaPlugin{
 	@Override
 	public void onDisable() {
 		saveConfig();
-		//WorldModule.deleteWorlds();
+		WorldModule.deleteWorlds();
 	}
 	
 	public static Main getInstance() {

@@ -11,10 +11,11 @@ import org.bukkit.event.server.ServerListPingEvent;
 
 import me.TrexMX.Modules.ConfigInfo;
 import me.TrexMX.Modules.LangInfo;
-import me.TrexMX.Modules.Players;
 import me.TrexMX.Modules.Sounds;
 import me.TrexMX.Modules.Game;
 import me.TrexMX.Modules.GameState;
+import me.TrexMX.Teams.BossTeam;
+import me.TrexMX.Teams.RestTeam;
 
 public class EventsListener implements Listener {
 	
@@ -52,7 +53,7 @@ public class EventsListener implements Listener {
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent e) {
 		Player deadPlayer = e.getEntity();
-		if (deadPlayer.equals(Players.getBossPlayer())) {
+		if (deadPlayer.equals(BossTeam.getBossPlayer())) {
 			BossPlayerDeath event = new BossPlayerDeath(deadPlayer, deadPlayer.getKiller());
 			Bukkit.getServer().getPluginManager().callEvent(event);
 		}
@@ -61,7 +62,7 @@ public class EventsListener implements Listener {
 	@EventHandler
 	public void onBossDeath(BossPlayerDeath e) {
 		Sounds.playLose(e.getBoss());
-		for (Player p : Players.getRestPlayers()) {
+		for (Player p : RestTeam.getPlayers()) {
 			Sounds.playWin(p);
 		}
 		

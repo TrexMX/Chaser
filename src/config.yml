@@ -6,3 +6,5 @@ gameDuration: 120
 LobbyWorld: 'lobby'
 spawnLocation: '2,80,2'
 GameWorld: 'arena'
+BossTeamName: 'Boss'
+RestPlayersTeamName: 'Rest'
