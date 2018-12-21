@@ -11,7 +11,6 @@ import org.bukkit.event.server.ServerListPingEvent;
 
 import me.TrexMX.Modules.ConfigInfo;
 import me.TrexMX.Modules.LangInfo;
-import me.TrexMX.Modules.Sounds;
 import me.TrexMX.Modules.Game;
 import me.TrexMX.Modules.GameState;
 import me.TrexMX.Teams.BossTeam;

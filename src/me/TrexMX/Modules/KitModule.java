@@ -45,7 +45,7 @@ public class KitModule {
 			String name= duo[0];
 			int amount = Integer.parseInt(duo[1]);
 			int slot = Integer.parseInt(duo[2]);
-			item = new ItemStack(Material.getMaterial(name,false), amount);
+			item = new ItemStack(Material.getMaterial(name), amount);
 			Inventory BossKitInventory = Main.getInstance().getServer().createInventory(null, InventoryType.PLAYER);
 			BossKitInventory.setItem(slot, item);
                         BossTeam.setKit(BossKitInventory);
