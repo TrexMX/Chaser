@@ -6,6 +6,8 @@ import me.TrexMX.Commands.ChaserCommand;
 import me.TrexMX.Events.EventsListener;
 import me.TrexMX.Modules.ArenaInfo;
 import me.TrexMX.Modules.ConfigInfo;
+import me.TrexMX.Modules.Game;
+import me.TrexMX.Modules.GameState;
 import me.TrexMX.Modules.KitModule;
 import me.TrexMX.Modules.LangInfo;
 import me.TrexMX.Modules.LoadConfig;
@@ -32,9 +34,8 @@ public class Main extends JavaPlugin{
 		WorldModule.loadWorlds();
                 BossTeam.setName(ConfigInfo.getBossTeamName());
                 RestTeam.setName(ConfigInfo.getRestTeamName());
-		this.getCommand("/chaser").setExecutor(new ChaserCommand());
+		//this.getCommand("/chaser").setExecutor(new ChaserCommand());
 		this.getServer().getPluginManager().registerEvents(events, this);
-
 	}
 	
 	@Override
@@ -46,5 +47,5 @@ public class Main extends JavaPlugin{
 	public static Main getInstance() {
 		return instance;
 	}
-	
+       
 }

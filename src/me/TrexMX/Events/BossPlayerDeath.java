@@ -31,7 +31,7 @@ public class BossPlayerDeath extends Event {
 		return handlers;
 	}
 
-	static public HandlerList getHandlersList() {
+	static HandlerList getHandlerList() {
 		return handlers;
 	}
 	

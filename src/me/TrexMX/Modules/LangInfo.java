@@ -17,7 +17,9 @@ public class LangInfo {
         lose_message,
         winner_broadcast,
         bossbar_message,
-        serverrestart_message;
+        serverrestart_message,
+                waiting_message,
+                needmoreplayers_bar;
 
 	
 	public static void getMessages() {
@@ -33,6 +35,8 @@ public class LangInfo {
                 winner_broadcast =  LoadConfig.getLangConfig().getString("winner_broadcast");
                 bossbar_message =  LoadConfig.getLangConfig().getString("bossbar_message");
                 serverrestart_message = LoadConfig.getLangConfig().getString("serverwillrestart_message");
+                waiting_message = LoadConfig.getLangConfig().getString("waiting_broadcast");
+                needmoreplayers_bar = LoadConfig.getLangConfig().getString("needmoreplayers_bar");
 		Main.getInstance().getLogger().info("Language config loaded");
 	}
 	

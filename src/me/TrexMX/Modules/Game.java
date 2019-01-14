@@ -15,7 +15,7 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.potion.PotionEffect;
 public class Game {
 	
-
+        private static BossBar WaitingBar;
 	private static GameState state;        
 	
 	@SuppressWarnings("deprecation")
@@ -172,10 +172,25 @@ public class Game {
                 
 	}
         
-        
+        public static void setWaiting() {
+            state = GameState.WAITING;
+            BarFlag fg = BarFlag.DARKEN_SKY;
+            WaitingBar = Bukkit.createBossBar(LangInfo.needmoreplayers_bar.replace("%n",String.valueOf(
+                   ConfigInfo.getMaxPlayers() - Bukkit.getOnlinePlayers().size())), BarColor.BLUE, BarStyle.SOLID, fg);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    Bukkit.broadcastMessage(LangInfo.waiting_message);
+                }
+            }.runTaskTimer(Main.getPlugin(Main.class), 0, 3600);
+        }
 
 	public static GameState getGameState() {
 		return state;
 	}
+	
+        public static BossBar getWaitingBossBar() {
+            return WaitingBar;
+        }
 	
 }

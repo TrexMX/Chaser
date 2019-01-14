@@ -1,5 +1,6 @@
 package me.TrexMX.Events;
 
+import me.TrexMX.Main.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,7 +12,6 @@ import org.bukkit.event.server.ServerListPingEvent;
 
 import me.TrexMX.Modules.ConfigInfo;
 import me.TrexMX.Modules.LangInfo;
-import me.TrexMX.Modules.Sounds;
 import me.TrexMX.Modules.Game;
 import me.TrexMX.Modules.GameState;
 import me.TrexMX.Teams.BossTeam;
@@ -31,12 +31,13 @@ public class EventsListener implements Listener {
 	public void onJoin(PlayerJoinEvent e) {
             Player player = e.getPlayer();
             if (Game.getGameState() == GameState.STARTING && player.hasPermission("*")) {
-                    player.kickPlayer(Game.getGameState().toString());
+                player.kickPlayer(Game.getGameState().toString());
             }
             String variables[] = {"%p%","%cp%","%max%"};
             String replace[] = {player.getName(),String.valueOf(Bukkit.getOnlinePlayers().size()),String.valueOf(ConfigInfo.getMaxPlayers())};
             Bukkit.broadcastMessage(LangInfo.replaceVariables(LangInfo.join_message, variables, replace));
-		
+            Game.getWaitingBossBar().setTitle(LangInfo.needmoreplayers_bar.replace("%n",String.valueOf(
+                       ConfigInfo.getMaxPlayers() - Bukkit.getOnlinePlayers().size())));
 		
 
 	}

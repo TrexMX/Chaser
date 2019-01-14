@@ -2,6 +2,8 @@ package me.TrexMX.Modules;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
@@ -27,18 +29,21 @@ public class WorldModule {
 	
 	public static void copyWorlds() {
 		
-		File srcGameW = new File(Main.getInstance().getDataFolder().getAbsolutePath() + File.separator +ConfigInfo.getGameWorldName());
-		File srcLobbyW = new File(Main.getInstance().getDataFolder().getAbsolutePath() + File.separator +ConfigInfo.getLobbyWorldName());
+		File srcGameW = new File(Main.getInstance().getDataFolder().getAbsolutePath() + File.separator +ConfigInfo.getGameWorldName() + File.separator);
+		File srcLobbyW = new File(Main.getInstance().getDataFolder().getAbsolutePath() + File.separator +ConfigInfo.getLobbyWorldName() + File.separator);
 		File srcWorlds = Bukkit.getWorldContainer().getAbsoluteFile();
 		
 		try {
 			FileUtils.copyDirectory(srcGameW, srcWorlds);
-			FileUtils.copyDirectory(srcLobbyW, srcWorlds);
-			Main.getInstance().getLogger().info("Mundos copiados");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+            try {
+                FileUtils.copyDirectory(srcLobbyW, srcWorlds);
+            } catch (IOException ex) {
+                Logger.getLogger(WorldModule.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            Main.getInstance().getLogger().info("Mundos cargaos");
 	}
 	
 	public static void deleteWorlds() {
