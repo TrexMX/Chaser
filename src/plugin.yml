@@ -1,7 +1,7 @@
 main: me.TrexMX.Main.Main
 name: Chaser
 api-version: 1.13
-version: 1.0
+version: 1.0.2
 
 commands:
     chaser:
