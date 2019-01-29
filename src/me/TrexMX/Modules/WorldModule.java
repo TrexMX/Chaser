@@ -38,10 +38,11 @@ public class WorldModule {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+                
             try {
                 FileUtils.copyDirectory(srcLobbyW, srcWorlds);
-            } catch (IOException ex) {
-                Logger.getLogger(WorldModule.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
             Main.getInstance().getLogger().info("Mundos cargaos");
 	}

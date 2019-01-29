@@ -2,12 +2,10 @@ package me.TrexMX.Main;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.TrexMX.Commands.ChaserCommand;
 import me.TrexMX.Events.EventsListener;
 import me.TrexMX.Modules.ArenaInfo;
 import me.TrexMX.Modules.ConfigInfo;
 import me.TrexMX.Modules.Game;
-import me.TrexMX.Modules.GameState;
 import me.TrexMX.Modules.KitModule;
 import me.TrexMX.Modules.LangInfo;
 import me.TrexMX.Modules.LoadConfig;
@@ -22,7 +20,6 @@ public class Main extends JavaPlugin{
 	
 	@Override
 	public void onEnable() {
-		EventsListener events = new EventsListener();
 		instance = this;
 		LoadConfig.loadConfigurationFiles();
 		ConfigInfo.loadServerInfo();
@@ -34,8 +31,9 @@ public class Main extends JavaPlugin{
 		WorldModule.loadWorlds();
                 BossTeam.setName(ConfigInfo.getBossTeamName());
                 RestTeam.setName(ConfigInfo.getRestTeamName());
+                Game.setWaiting();
 		//this.getCommand("/chaser").setExecutor(new ChaserCommand());
-		this.getServer().getPluginManager().registerEvents(events, this);
+		this.getServer().getPluginManager().registerEvents(new EventsListener(), getPlugin(Main.class));
 	}
 	
 	@Override

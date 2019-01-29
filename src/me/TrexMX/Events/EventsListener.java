@@ -14,11 +14,14 @@ import me.TrexMX.Modules.ConfigInfo;
 import me.TrexMX.Modules.LangInfo;
 import me.TrexMX.Modules.Game;
 import me.TrexMX.Modules.GameState;
+import me.TrexMX.Modules.WorldModule;
 import me.TrexMX.Teams.BossTeam;
 import me.TrexMX.Teams.RestTeam;
+import org.bukkit.Location;
 
 public class EventsListener implements Listener {
 	
+        
 	
 	@EventHandler
 	public void serverPing(ServerListPingEvent e) {
@@ -30,12 +33,18 @@ public class EventsListener implements Listener {
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
             Player player = e.getPlayer();
-            if (Game.getGameState() == GameState.STARTING && player.hasPermission("*")) {
-                player.kickPlayer(Game.getGameState().toString());
-            }
             String variables[] = {"%p%","%cp%","%max%"};
             String replace[] = {player.getName(),String.valueOf(Bukkit.getOnlinePlayers().size()),String.valueOf(ConfigInfo.getMaxPlayers())};
-            Bukkit.broadcastMessage(LangInfo.replaceVariables(LangInfo.join_message, variables, replace));
+           
+            String[] loc = ConfigInfo.getSpawnLocation().split(",");
+            
+            Location lobby = new Location(WorldModule.getLobbyWorld(), Double.parseDouble(loc[0]),Double.parseDouble(loc[1]),Double.parseDouble(loc[2]));
+            player.teleport(lobby);
+            
+            if (Game.getGameState() == GameState.STARTING && !player.hasPermission("*")) {
+                player.kickPlayer(Game.getGameState().toString());
+            }
+            Game.getWaitingBossBar().addPlayer(player);
             Game.getWaitingBossBar().setTitle(LangInfo.needmoreplayers_bar.replace("%n",String.valueOf(
                        ConfigInfo.getMaxPlayers() - Bukkit.getOnlinePlayers().size())));
 		

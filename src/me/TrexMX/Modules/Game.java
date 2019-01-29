@@ -173,10 +173,9 @@ public class Game {
 	}
         
         public static void setWaiting() {
+            int players = ConfigInfo.getMaxPlayers() - Bukkit.getOnlinePlayers().size();
             state = GameState.WAITING;
-            BarFlag fg = BarFlag.DARKEN_SKY;
-            WaitingBar = Bukkit.createBossBar(LangInfo.needmoreplayers_bar.replace("%n",String.valueOf(
-                   ConfigInfo.getMaxPlayers() - Bukkit.getOnlinePlayers().size())), BarColor.BLUE, BarStyle.SOLID, fg);
+            WaitingBar = Bukkit.createBossBar(LangInfo.needmoreplayers_bar.replace("%n",String.valueOf(players)), BarColor.BLUE, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC);
             new BukkitRunnable() {
                 @Override
                 public void run() {
