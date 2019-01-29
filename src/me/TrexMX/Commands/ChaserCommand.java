@@ -1,5 +1,8 @@
 package me.TrexMX.Commands;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,10 +15,13 @@ public class ChaserCommand implements CommandExecutor{
 		if (sender instanceof Player) {
 			Player p = (Player) sender;
 			if (args.length < 1) {
-				// to-do functions
+				p.sendMessage("§cPlugin developed by Ernesto Ramírez, email: ernestorb_@outlook.com");
 				
 			} else {
-				// to-do arguments functions
+				if (args[0].equalsIgnoreCase("world")) {
+					
+					p.teleport(new Location(Bukkit.getWorld(args[1]), 0, 70, 0));
+				}
 				
 			}
 			

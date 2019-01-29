@@ -3,6 +3,7 @@ package me.TrexMX.Main;
 import java.util.logging.Logger;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import me.TrexMX.Commands.ChaserCommand;
 import me.TrexMX.Events.EventsListener;
 import me.TrexMX.Modules.ArenaInfo;
 import me.TrexMX.Modules.ConfigInfo;
@@ -14,7 +15,6 @@ import me.TrexMX.Modules.PotionEffectModule;
 import me.TrexMX.Modules.WorldModule;
 import me.TrexMX.Teams.BossTeam;
 import me.TrexMX.Teams.RestTeam;
-import org.bukkit.Bukkit;
 
 public class Main extends JavaPlugin{
 
@@ -34,7 +34,7 @@ public class Main extends JavaPlugin{
                 BossTeam.setName(ConfigInfo.getBossTeamName());
                 RestTeam.setName(ConfigInfo.getRestTeamName());
                 Game.setWaiting();
-		//this.getCommand("/chaser").setExecutor(new ChaserCommand());
+		this.getCommand("chaser").setExecutor(new ChaserCommand());
 		this.getServer().getPluginManager().registerEvents(new EventsListener(), getPlugin(Main.class));
         }
 	
