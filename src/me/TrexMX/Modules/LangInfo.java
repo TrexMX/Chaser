@@ -41,11 +41,12 @@ public class LangInfo {
 	}
 	
 	public static String replaceVariables(String message, String[] variables, String[] replace) {
-		for (int x=0;x<variables.length;x++) {
-			message.replaceAll(variables[x], replace[x]);
+		String replaceAll = message;
+                for (int x=0;x<variables.length;x++) {
+                    replaceAll = message.replaceAll(variables[x], replace[x]);
 		}
 		
-		return message;
+		return replaceAll;
 	}
 	
 }

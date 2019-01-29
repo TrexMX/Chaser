@@ -7,8 +7,7 @@ public class ConfigInfo {
 	
 	//private static String MOTD;
 	private static String gameWorldName,lobbyWorldName,spawnLocation,bossTeamName, restTeamName;
-	private static int maxPlayers;
-	private static int gameDuration;
+	private static int maxPlayers,gameDuration;
 	
 	
 	public static void loadServerInfo() {

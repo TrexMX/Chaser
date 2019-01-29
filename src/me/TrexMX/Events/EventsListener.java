@@ -35,12 +35,10 @@ public class EventsListener implements Listener {
             Player player = e.getPlayer();
             String variables[] = {"%p%","%cp%","%max%"};
             String replace[] = {player.getName(),String.valueOf(Bukkit.getOnlinePlayers().size()),String.valueOf(ConfigInfo.getMaxPlayers())};
-           
+            Bukkit.broadcastMessage(LangInfo.replaceVariables(LangInfo.join_message, variables, replace));
             String[] loc = ConfigInfo.getSpawnLocation().split(",");
-            
             Location lobby = new Location(WorldModule.getLobbyWorld(), Double.parseDouble(loc[0]),Double.parseDouble(loc[1]),Double.parseDouble(loc[2]));
             player.teleport(lobby);
-            
             if (Game.getGameState() == GameState.STARTING && !player.hasPermission("*")) {
                 player.kickPlayer(Game.getGameState().toString());
             }
@@ -57,7 +55,6 @@ public class EventsListener implements Listener {
             String variables[] = {"%p%","%cp%","%max%"};
             String replace[] = {player.getName(),String.valueOf(Bukkit.getOnlinePlayers().size()),String.valueOf(ConfigInfo.getMaxPlayers())};
             Bukkit.broadcastMessage(LangInfo.replaceVariables(LangInfo.left_message, variables, replace));
-		
 	}
 
 	@EventHandler

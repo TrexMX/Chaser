@@ -29,22 +29,16 @@ public class WorldModule {
 	
 	public static void copyWorlds() {
 		
-		File srcGameW = new File(Main.getInstance().getDataFolder().getAbsolutePath() + File.separator +ConfigInfo.getGameWorldName() + File.separator);
-		File srcLobbyW = new File(Main.getInstance().getDataFolder().getAbsolutePath() + File.separator +ConfigInfo.getLobbyWorldName() + File.separator);
-		File srcWorlds = Bukkit.getWorldContainer().getAbsoluteFile();
+		File srcGameWorlds = new File(Main.getInstance().getDataFolder().getAbsolutePath() + File.separator + "worlds" + File.separator);
+		File srcBukkitWorlds = Bukkit.getWorldContainer().getAbsoluteFile();
 		
 		try {
-			FileUtils.copyDirectory(srcGameW, srcWorlds);
+			FileUtils.copyDirectory(srcGameWorlds, srcBukkitWorlds);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-                
-            try {
-                FileUtils.copyDirectory(srcLobbyW, srcWorlds);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Main.getInstance().getLogger().info("Mundos cargaos");
+
+            Main.getInstance().getLogger().info("Mundos copiados");
 	}
 	
 	public static void deleteWorlds() {

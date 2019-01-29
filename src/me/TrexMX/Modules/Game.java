@@ -173,15 +173,15 @@ public class Game {
 	}
         
         public static void setWaiting() {
-            int players = ConfigInfo.getMaxPlayers() - Bukkit.getOnlinePlayers().size();
             state = GameState.WAITING;
-            WaitingBar = Bukkit.createBossBar(LangInfo.needmoreplayers_bar.replace("%n",String.valueOf(players)), BarColor.BLUE, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC);
+            WaitingBar = Bukkit.createBossBar(LangInfo.needmoreplayers_bar.replace("%n",String.valueOf(
+                       ConfigInfo.getMaxPlayers() - Bukkit.getOnlinePlayers().size())), BarColor.BLUE, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC);
             new BukkitRunnable() {
                 @Override
                 public void run() {
                     Bukkit.broadcastMessage(LangInfo.waiting_message);
                 }
-            }.runTaskTimer(Main.getPlugin(Main.class), 0, 3600);
+            }.runTaskTimer(Main.getPlugin(Main.class), 0, 600);
         }
 
 	public static GameState getGameState() {

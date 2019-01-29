@@ -52,7 +52,7 @@ public class LoadConfig {
 	}
 	
 	public static YamlConfiguration getLangConfig() {
-		return arena;
+		return lang;
 	}
 	
 	public static FileConfiguration getConfig() {

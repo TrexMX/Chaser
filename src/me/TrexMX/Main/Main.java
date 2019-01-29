@@ -1,5 +1,6 @@
 package me.TrexMX.Main;
 
+import java.util.logging.Logger;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.TrexMX.Events.EventsListener;
@@ -13,6 +14,7 @@ import me.TrexMX.Modules.PotionEffectModule;
 import me.TrexMX.Modules.WorldModule;
 import me.TrexMX.Teams.BossTeam;
 import me.TrexMX.Teams.RestTeam;
+import org.bukkit.Bukkit;
 
 public class Main extends JavaPlugin{
 
@@ -34,7 +36,7 @@ public class Main extends JavaPlugin{
                 Game.setWaiting();
 		//this.getCommand("/chaser").setExecutor(new ChaserCommand());
 		this.getServer().getPluginManager().registerEvents(new EventsListener(), getPlugin(Main.class));
-	}
+        }
 	
 	@Override
 	public void onDisable() {
