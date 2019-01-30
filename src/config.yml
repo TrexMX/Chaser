@@ -1,10 +1,10 @@
-restPlayers: 6
+restPlayers: 3
 # not implemented yet
 bossPlayers: 1
 # GameDuration in seconds
 gameDuration: 120
 LobbyWorld: 'lobby'
-spawnLocation: '2,80,2'
+spawnLocation: '0,4,0'
 GameWorld: 'arena'
 BossTeamName: 'Boss'
 RestPlayersTeamName: 'Rest'

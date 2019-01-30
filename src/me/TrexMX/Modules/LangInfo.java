@@ -43,7 +43,7 @@ public class LangInfo {
 	public static String replaceVariables(String message, String[] variables, String[] replace) {
 		String replaceAll = message;
                 for (int x=0;x<variables.length;x++) {
-                    replaceAll = message.replaceAll(variables[x], replace[x]);
+                    replaceAll = replaceAll.replaceAll(variables[x], replace[x]);
 		}
 		
 		return replaceAll;

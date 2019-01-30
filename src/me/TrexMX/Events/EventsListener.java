@@ -18,6 +18,10 @@ import me.TrexMX.Modules.WorldModule;
 import me.TrexMX.Teams.BossTeam;
 import me.TrexMX.Teams.RestTeam;
 import org.bukkit.Location;
+import org.bukkit.Sound;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 
 public class EventsListener implements Listener {
 	
@@ -28,32 +32,69 @@ public class EventsListener implements Listener {
             e.setMotd(Game.getGameState().toString());
             e.setMaxPlayers(ConfigInfo.getMaxPlayers());
 	}
-	
-	
+        
+	@EventHandler
+        public void onPreJoin(AsyncPlayerPreLoginEvent e) {
+            
+            if (Bukkit.getOnlinePlayers().size() >= ConfigInfo.getMaxPlayers()) {
+                e.disallow(Result.KICK_FULL ,"Estamos llenos! Estado del juego: " + Game.getGameState().toString());
+            }
+        }
+	@EventHandler
+        public void onPlayerDamage(EntityDamageByEntityEvent e){
+            
+            if (e.getEntity() instanceof Player && e.getDamager() instanceof Player) {
+                Player damaged = (Player) e.getEntity();
+                Player damager = (Player) e.getDamager();
+                if (Game.getGameState().equals(GameState.WAITING)) {
+                e.setCancelled(true);
+                } else {
+                    if (RestTeam.getPlayers().contains(damaged) && RestTeam.getPlayers().contains(damager)) {
+                        damager.sendMessage("§You can't hurt your team");
+                        e.setCancelled(true);
+                    }  
+                }
+
+            }
+        }
+        
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
+            e.setJoinMessage(null);
             Player player = e.getPlayer();
+
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                p.playSound(p.getLocation(), Sound.BLOCK_LAVA_POP, 5,5);
+            }
             String variables[] = {"%p%","%cp%","%max%"};
             String replace[] = {player.getName(),String.valueOf(Bukkit.getOnlinePlayers().size()),String.valueOf(ConfigInfo.getMaxPlayers())};
             Bukkit.broadcastMessage(LangInfo.replaceVariables(LangInfo.join_message, variables, replace));
             String[] loc = ConfigInfo.getSpawnLocation().split(",");
             Location lobby = new Location(WorldModule.getLobbyWorld(), Double.parseDouble(loc[0]),Double.parseDouble(loc[1]),Double.parseDouble(loc[2]));
             player.teleport(lobby);
-            if (Game.getGameState() == GameState.STARTING && !player.hasPermission("*")) {
-                player.kickPlayer(Game.getGameState().toString());
-            }
+
             Game.getWaitingBossBar().addPlayer(player);
             Game.getWaitingBossBar().setTitle(LangInfo.needmoreplayers_bar.replace("%n",String.valueOf(
                        ConfigInfo.getMaxPlayers() - Bukkit.getOnlinePlayers().size())));
+            if (Bukkit.getOnlinePlayers().size() == ConfigInfo.getMaxPlayers() && Game.getGameState().equals(GameState.WAITING)) {
+                Game.startCountdownToStart();
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    Game.getWaitingBossBar().removePlayer(p);
+                }
+            }
 		
 
 	}
 	
 	@EventHandler
 	public void onQuit(PlayerQuitEvent e) {
+            e.setQuitMessage(null);
             Player player = e.getPlayer();
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_PLACE, 5,5);
+            }
             String variables[] = {"%p%","%cp%","%max%"};
-            String replace[] = {player.getName(),String.valueOf(Bukkit.getOnlinePlayers().size()),String.valueOf(ConfigInfo.getMaxPlayers())};
+            String replace[] = {player.getName(),String.valueOf(Bukkit.getOnlinePlayers().size()-1),String.valueOf(ConfigInfo.getMaxPlayers())};
             Bukkit.broadcastMessage(LangInfo.replaceVariables(LangInfo.left_message, variables, replace));
 	}
 

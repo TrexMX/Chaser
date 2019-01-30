@@ -15,7 +15,7 @@ public class ChaserCommand implements CommandExecutor{
 		if (sender instanceof Player) {
 			Player p = (Player) sender;
 			if (args.length < 1) {
-				p.sendMessage("§cPlugin developed by Ernesto Ramírez, email: ernestorb_@outlook.com");
+				p.sendMessage("Â§cPlugin developed by Ernesto Ramirez");
 				
 			} else {
 				if (args[0].equalsIgnoreCase("world")) {
