@@ -9,8 +9,8 @@ bossLocation: '10,4,10'
 # Kits are written ITEM;AMOUNT;SLOT
 bossKit:
   - 'CAKE;1;1'
+restKit:
+  - 'DIAMOND_AXE;1;1'
 # Effects are written POTIONEFFECT_TYPE;DURATION;AMPLIFIER
 bossEffects:
   - 'ABSORPTION;600;15'
-restKit:
-  - 'DIAMOND_AXE;1;1'

@@ -18,7 +18,7 @@ public class ChaserCommand implements CommandExecutor{
 				p.sendMessage("§cPlugin developed by Ernesto Ramirez");
 				
 			} else {
-				if (args[0].equalsIgnoreCase("world")) {
+				if (args[0].equalsIgnoreCase("world") && !args[1].isEmpty()) {
 					
 					p.teleport(new Location(Bukkit.getWorld(args[1]), 0, 70, 0));
 				}

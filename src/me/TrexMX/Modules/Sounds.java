@@ -21,8 +21,8 @@ public class Sounds {
 	
 	public static void playCustomSounds(Player player, Sound[] sounds) {
             Location loc = player.getLocation();
-            for (int x=0; x<sounds.length; x++) {
-		player.playSound(loc, sounds[x], 10F, 10F);
+            for (Sound s : sounds) {
+		player.playSound(loc, s, 10F, 10F);
             }
 	}
 	

@@ -37,6 +37,7 @@ public class Game {
 					state = GameState.PLAYING;
 					giveKits();
                                         setEffects();
+                                        count = -1;
 					cancel();
 				}
 
@@ -53,7 +54,8 @@ public class Game {
 			public void run() {
                                 if (count == ConfigInfo.getGameDuration()) {
                                     for (Player p : Bukkit.getOnlinePlayers()) {
-                                        Game.getWaitingBossBar().addPlayer(p);
+                                        bar.addPlayer(p);
+                                        bar.setVisible(true);
                                     }   
                                 }
                                 
@@ -73,6 +75,7 @@ public class Game {
                                     }
 
                                     endGame();
+                                    count = -1;
                                     cancel();
                                 }
                                 if (count > 0 && state.equals(GameState.ENDED)) {
@@ -94,7 +97,8 @@ public class Game {
 	@SuppressWarnings("deprecation")
 	public static void startCountdownToStart() {
 		state = GameState.STARTING;
-                
+                WaitingBar.removeAll();
+                WaitingBar.setVisible(false);
 		new BukkitRunnable() {
 			int count=10;
 			
@@ -110,6 +114,7 @@ public class Game {
                                         new Players();
 					teleportPlayers();
 					cancel();
+                                        count = -1;
 				}
 				if (Bukkit.getOnlinePlayers().size()<ConfigInfo.getMaxPlayers()) {
 					Bukkit.broadcastMessage(LangInfo.notenoughplayers);
@@ -173,13 +178,13 @@ public class Game {
                 }
                 
                 new BukkitRunnable() {
-                    int count = 10;
+                    int count = 20;
                     @Override                    
                     public void run() {
-                        if (count == 10 ){
+                        if (count == 20 ){
                             Bukkit.broadcastMessage(LangInfo.serverrestart_message);
                         }
-                        if (count <5 && count >0) {
+                        if (count <6 && count >0) {
                             Bukkit.broadcastMessage("§cRestarting in " + count);
                         }
                         count--;
@@ -193,7 +198,9 @@ public class Game {
 	}
         
         public static void setWaiting() {
+            // Establece el juego como estado "esperando"
             state = GameState.WAITING;
+            // Crea boss bar
             WaitingBar = Bukkit.createBossBar(LangInfo.needmoreplayers_bar.replace("%n",String.valueOf(
                        ConfigInfo.getMaxPlayers() - Bukkit.getOnlinePlayers().size())), BarColor.BLUE, BarStyle.SOLID, BarFlag.DARKEN_SKY);
             new BukkitRunnable() {
@@ -202,7 +209,7 @@ public class Game {
                     if (Game.getGameState().equals(GameState.WAITING)){
                         Bukkit.broadcastMessage(LangInfo.waiting_message);
                     } else {
-                        cancel();
+                        this.cancel();
                     }
                     
                 }

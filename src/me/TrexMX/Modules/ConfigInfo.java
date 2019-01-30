@@ -5,13 +5,11 @@ import me.TrexMX.Main.Main;
 public class ConfigInfo {
 
 	
-	//private static String MOTD;
 	private static String gameWorldName,lobbyWorldName,spawnLocation,bossTeamName, restTeamName;
 	private static int maxPlayers,gameDuration;
 	
 	
 	public static void loadServerInfo() {
-		//MOTD = LoadConfig.getConfig().getString("MOTD");
 		maxPlayers = LoadConfig.getConfig().getInt("restPlayers") + 1;
 		gameWorldName = LoadConfig.getConfig().getString("GameWorld");
 		lobbyWorldName = LoadConfig.getConfig().getString("LobbyWorld");
@@ -22,9 +20,6 @@ public class ConfigInfo {
 		Main.getInstance().getLogger().info("Server config loaded");
 	}
 	
-	/*public static String getMOTD() {
-		return MOTD;
-	}*/
 	public static int getMaxPlayers() {
 		return maxPlayers;
 	}

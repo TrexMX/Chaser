@@ -19,7 +19,8 @@ public class LangInfo {
         bossbar_message,
         serverrestart_message,
                 waiting_message,
-                needmoreplayers_bar;
+                needmoreplayers_bar,
+                you_killed;
 
 	
 	public static void getMessages() {
@@ -37,9 +38,12 @@ public class LangInfo {
                 serverrestart_message = LoadConfig.getLangConfig().getString("serverwillrestart_message");
                 waiting_message = LoadConfig.getLangConfig().getString("waiting_broadcast");
                 needmoreplayers_bar = LoadConfig.getLangConfig().getString("needmoreplayers_bar");
+                you_killed = LoadConfig.getLangConfig().getString("youkilledtheboss");
 		Main.getInstance().getLogger().info("Language config loaded");
 	}
 	
+        // Reemplaza las variables en un Vector con las Strings de otro vector, efectivo si tienes que
+        // reemplazar muchas variables en un solo mensaje
 	public static String replaceVariables(String message, String[] variables, String[] replace) {
 		String replaceAll = message;
                 for (int x=0;x<variables.length;x++) {

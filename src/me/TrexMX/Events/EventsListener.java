@@ -39,7 +39,11 @@ public class EventsListener implements Listener {
             if (Bukkit.getOnlinePlayers().size() >= ConfigInfo.getMaxPlayers()) {
                 e.disallow(Result.KICK_FULL ,"Estamos llenos! Estado del juego: " + Game.getGameState().toString());
             }
+            if (!Game.getGameState().equals(GameState.WAITING)) {
+                e.disallow(Result.KICK_OTHER, "Estado del juego: "+ Game.getGameState().toString());
+            }
         }
+        
 	@EventHandler
         public void onPlayerDamage(EntityDamageByEntityEvent e){
             
@@ -47,7 +51,8 @@ public class EventsListener implements Listener {
                 Player damaged = (Player) e.getEntity();
                 Player damager = (Player) e.getDamager();
                 if (Game.getGameState().equals(GameState.WAITING)) {
-                e.setCancelled(true);
+                    damager.sendMessage("§The game hasn't started yet");
+                    e.setCancelled(true);
                 } else {
                     if (RestTeam.getPlayers().contains(damaged) && RestTeam.getPlayers().contains(damager)) {
                         damager.sendMessage("§You can't hurt your team");
@@ -78,9 +83,6 @@ public class EventsListener implements Listener {
                        ConfigInfo.getMaxPlayers() - Bukkit.getOnlinePlayers().size())));
             if (Bukkit.getOnlinePlayers().size() == ConfigInfo.getMaxPlayers() && Game.getGameState().equals(GameState.WAITING)) {
                 Game.startCountdownToStart();
-                for (Player p : Bukkit.getOnlinePlayers()) {
-                    Game.getWaitingBossBar().removePlayer(p);
-                }
             }
 		
 
@@ -111,6 +113,7 @@ public class EventsListener implements Listener {
 	public void onBossDeath(BossPlayerDeath e) {
             RestTeam.setWinners(true);
             BossTeam.setWinners(false);
+            e.getKiller().sendMessage(LangInfo.you_killed);
             Game.endGame();
 	}
 }

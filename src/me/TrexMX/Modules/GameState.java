@@ -8,6 +8,7 @@ public enum GameState {
     PLAYING(),
     ENDED();
 
+    @Override
     public String toString() {
         switch (this) {
             case WAITING:

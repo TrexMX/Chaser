@@ -10,14 +10,15 @@ public class PotionEffectModule {
     public static PotionEffect[] BossEffects;
     
     public static void loadEffects() {
-        int index = 0;
-        BossEffects = new PotionEffect[ArenaInfo.getBossEffects().length];
+        int howmany = 0;
         for (String effects : ArenaInfo.getBossEffects()) {
             String[] effect = new String[3];
             effect = effects.split(";");
-            BossEffects[index] = new PotionEffect(PotionEffectType.getByName(effect[0]), Integer.parseInt(effect[1]),
+            BossEffects[howmany] = new PotionEffect(
+                    PotionEffectType.getByName(effect[0]), 
+                    Integer.parseInt(effect[1]),
                     Integer.parseInt(effect[2]));
-            index++;    
+            howmany++;    
         }
         BossTeam.setBossEffects(BossEffects);
         Main.getInstance().getLogger().info("Potion Effect Loaded");
