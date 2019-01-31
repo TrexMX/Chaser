@@ -1,6 +1,9 @@
 package me.TrexMX.Modules;
 
+import com.google.common.collect.ImmutableList;
+import io.netty.util.internal.ThreadLocalRandom;
 import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import me.TrexMX.Main.Main;
@@ -13,19 +16,17 @@ public class Players {
 	private ArrayList<Player> restPlayers = new ArrayList<Player>();
 	
 	public Players() {
-            boss = Bukkit.getOnlinePlayers().stream().findAny().get();
+            List<Player> ps = ImmutableList.copyOf(Bukkit.getOnlinePlayers());
+            boss = ps.get(ThreadLocalRandom.current().nextInt(ps.size()));
             BossTeam.setBossPlayer(boss);
-            Bukkit.broadcastMessage("§4" + boss.getName() + " §ces el Chaser!");
-            boss.sendMessage("§4Eres el chaser!");
+
             for(Player players : Bukkit.getOnlinePlayers()) {
 			if (!players.equals(boss)) {
 				restPlayers.add(players);
 			}
 		}
             RestTeam.setPlayers(restPlayers);
-            for(Player p : restPlayers) {
-                p.sendMessage("§cTu trabajo es matar al Chaser!");
-            }
+
             Main.getInstance().getLogger().info("Players set on teams.");
 	}
 	

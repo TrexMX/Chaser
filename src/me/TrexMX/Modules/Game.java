@@ -1,5 +1,6 @@
 package me.TrexMX.Modules;
 
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -8,85 +9,70 @@ import org.bukkit.scheduler.BukkitRunnable;
 import me.TrexMX.Main.Main;
 import me.TrexMX.Teams.BossTeam;
 import me.TrexMX.Teams.RestTeam;
+import org.bukkit.Sound;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
-import org.bukkit.potion.PotionEffect;
 public class Game {
 	
-        private static BossBar WaitingBar;
+        private static BossBar Bar;
 	private static GameState state;        
 	
 	@SuppressWarnings("deprecation")
 	private static void startGame() {
-		
-		new BukkitRunnable() {
-			int count=10;
-			@Override
-			public void run() {
-				if (count>0 ) {
-					Bukkit.broadcastMessage(LangInfo.countdown_message.replaceAll("%count%",String.valueOf(count)));
-					count--;
-                                }
-                                if (count == 0) {
-					for(Player p : Bukkit.getOnlinePlayers()) {
-						p.sendMessage(LangInfo.teleported_message);
-					}
-					Bukkit.broadcastMessage(LangInfo.start_message);
-					state = GameState.PLAYING;
-					giveKits();
-                                        setEffects();
-                                        count = -1;
-					cancel();
-				}
+                if (Game.getGameState().equals(GameState.STARTING)) {
+                    state = GameState.PLAYING;
+                    Player boss = BossTeam.getBossPlayer();
+                    Bukkit.broadcastMessage("§4" + boss.getName() + " §ces el Chaser!");
+                    boss.sendMessage("§4Eres el chaser!");
+                    for(Player p : RestTeam.getPlayers()) {
+                        p.sendMessage("§cTu trabajo es matar al Chaser!");
+                    }
+                    giveKits();
+                    setEffects();
+                    Bukkit.broadcastMessage(LangInfo.start_message);
+                }
 
-			}
-		}.runTaskTimer(Main.getPlugin(Main.class), 0, 20);
-		
+                
 		new BukkitRunnable() {
 			int count=ConfigInfo.getGameDuration();
-                        BossBar bar = Bukkit.getServer().createBossBar(LangInfo.bossbar_message.replace("%t%", String.valueOf(count)),
-                                BarColor.BLUE, BarStyle.SOLID, BarFlag.DARKEN_SKY);
-                        
                         double divpersecond = 1/ConfigInfo.getGameDuration();
 			@Override
 			public void run() {
-                                if (count == ConfigInfo.getGameDuration()) {
-                                    for (Player p : Bukkit.getOnlinePlayers()) {
-                                        bar.addPlayer(p);
-                                        bar.setVisible(true);
-                                    }   
-                                }
+
                                 
-				if (count>0 && state.equals(GameState.PLAYING)) {
-                                    bar.setTitle(LangInfo.bossbar_message.replace("%t%", String.valueOf(count)));
-                                    bar.setProgress(divpersecond * count);
+				if (count >0 && state.equals(GameState.PLAYING)) {
+                                    Bar.setTitle(LangInfo.bossbar_message.replaceAll("%t%", String.valueOf(count)));
+                                    Bar.setProgress(divpersecond * count);
                                     count--;
                                 }
-				if (count==0) {
+                                
+				if (count==0 && Game.getGameState().equals(GameState.PLAYING)) {
                                     BossTeam.setWinners(true);
                                     RestTeam.setWinners(false);
-                                    bar.setTitle(LangInfo.winner_broadcast.replace("%team%", BossTeam.getTeamName()));
-                                    bar.setProgress(1);
+                                    
+                                    Bar.setTitle(LangInfo.winner_broadcast.replace("%team%", BossTeam.getTeamName()));
+                                    Bar.setProgress(1);
                                     for (Player p : Bukkit.getOnlinePlayers()) {
                                         p.sendTitle(LangInfo.winner_broadcast.replace("%team%", BossTeam.getTeamName()), "MCMéxico 2018",10,70,20);
                                         Bukkit.broadcastMessage(LangInfo.winner_broadcast.replace("%team%", BossTeam.getTeamName()));
                                     }
 
-                                    endGame();
+                                    
                                     count = -1;
-                                    cancel();
+                                    endGame();
+                                    this.cancel();
                                 }
-                                if (count > 0 && state.equals(GameState.ENDED)) {
-                                    bar.setTitle(LangInfo.winner_broadcast.replace("%team%", RestTeam.getTeamName()));
-                                    bar.setProgress(1);
+                                if (count > 0 && Game.getGameState().equals(GameState.ENDED)) {
+                                    Bar.setTitle(LangInfo.winner_broadcast.replace("%team%", RestTeam.getTeamName()));
+                                    Bar.setProgress(1);
                                     for (Player p : Bukkit.getOnlinePlayers()) {
                                         p.sendTitle(LangInfo.winner_broadcast.replace("%team%", RestTeam.getTeamName()), "MCMéxico 2018",10,70,20);
                                         Bukkit.broadcastMessage(LangInfo.winner_broadcast.replace("%team%", RestTeam.getTeamName()));
                                     }
-
-                                   cancel();
+                                    count = -1;
+                                   this.cancel();
 				}
 
 			}
@@ -95,37 +81,69 @@ public class Game {
 	}
 	
 	@SuppressWarnings("deprecation")
-	public static void startCountdownToStart() {
+	public static void countdownToTeleport() {
 		state = GameState.STARTING;
-                WaitingBar.removeAll();
-                WaitingBar.setVisible(false);
+                
 		new BukkitRunnable() {
 			int count=10;
-			
+			double divpersecond = 1/10;
 			@Override
 			public void run() {
 				if (count>0) {
 					Bukkit.broadcastMessage(LangInfo.teleportcountdown_message.replaceAll("%count%",String.valueOf(count)));
-					count--;
-				
+                                        Bar.setTitle(LangInfo.teleportcountdown_message.replaceAll("%count%",String.valueOf(count)));
+                                        Bar.setProgress(divpersecond * count);
+                                        count--;
 				}
 				if (count==0) {
-                                        startGame();
+                                        
                                         new Players();
 					teleportPlayers();
-					cancel();
+                                        countdownToStart();
                                         count = -1;
+					this.cancel();
+                                        
 				}
-				if (Bukkit.getOnlinePlayers().size()<ConfigInfo.getMaxPlayers()) {
+				if (Bukkit.getOnlinePlayers().size()<ConfigInfo.getMaxPlayers() && !Game.getGameState().equals(GameState.WAITING)) {
 					Bukkit.broadcastMessage(LangInfo.notenoughplayers);
 					state = GameState.WAITING;
-					cancel();
+					this.cancel();
 				}
 			}
 		}.runTaskTimer(Main.getPlugin(Main.class), 0, 20);
 		
 		
 	}
+        
+        public static void countdownToStart() {
+		new BukkitRunnable() {
+			int count=10;
+                        double divpersecond = 1/10;
+			@Override
+			public void run() {
+				if (count>0 ) {
+                                        for(Player p : Bukkit.getOnlinePlayers()) {
+						p.sendTitle(LangInfo.countdown_message.replaceAll("%count%",String.valueOf(count)), "", 20, 20, 20);
+                                                p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 2, 2);
+                                        }
+                                        Bar.setTitle(LangInfo.countdown_message.replaceAll("%count%",String.valueOf(count)));
+                                        Bar.setProgress(divpersecond * count);
+					Bukkit.broadcastMessage(LangInfo.countdown_message.replaceAll("%count%",String.valueOf(count)));
+					count--;
+                                }
+                                if (count == 0 && Game.getGameState().equals(GameState.STARTING)) {
+					for(Player p : Bukkit.getOnlinePlayers()) {
+						p.sendMessage(LangInfo.teleported_message);
+                                                p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_SNARE, 2, 2);
+					}
+					startGame();
+                                        count = -1;
+					this.cancel();
+				}
+
+			}
+		}.runTaskTimer(Main.getPlugin(Main.class), 0, 20);
+        }
 	
 	private static void teleportPlayers() {
 		String[] bossCords = ArenaInfo.getBossLocation().split(","); 
@@ -143,23 +161,32 @@ public class Game {
 	private static void giveKits() {
 		 BossTeam.getBossPlayer().getInventory().clear();
 		 BossTeam.getBossPlayer().getInventory().setContents(BossTeam.getTeamKit().getContents());
+                 Main.getInstance().getLogger().info("BossKit given");
 		for (Player p : RestTeam.getPlayers()) {
 			p.getInventory().clear();
 			p.getInventory().setContents(RestTeam.getTeamKit().getContents());
+                        
 		}
+                Main.getInstance().getLogger().info("RestKit given");
 	}
 
         private static void setEffects() {
-           for (PotionEffect effect : BossTeam.getBossEffects()) {
-               BossTeam.getBossPlayer().addPotionEffect(effect);
-           }
+               BossTeam.getBossPlayer().addPotionEffects(BossTeam.getBossEffects());
+               Main.getInstance().getLogger().info("Boss PotionEffects given");
         }
+        
 	public static void endGame() {
+            // Establece el juego como terminado
 		state  = GameState.ENDED;
+                // Aquí se dan las 4 formas de victoria
                 if (BossTeam.isWinner()){
                     Player p = BossTeam.getBossPlayer();
                     p.sendMessage(LangInfo.win_message);
                     Sounds.playWin(p);
+                    for (Player p1 : Bukkit.getOnlinePlayers()) {
+                        p1.sendTitle(LangInfo.winner_broadcast.replace("%team%", BossTeam.getTeamName()), "MCMéxico 2018",10,70,20);
+                        Bukkit.broadcastMessage(LangInfo.winner_broadcast.replace("%team%", BossTeam.getTeamName()));
+                    }
                 } else {
                     Player p = BossTeam.getBossPlayer();
                     p.sendMessage(LangInfo.lose_message);
@@ -170,19 +197,23 @@ public class Game {
                         p.sendMessage(LangInfo.win_message);
                         Sounds.playWin(p);
                     }
+                    for (Player p1 : Bukkit.getOnlinePlayers()) {
+                        p1.sendTitle(LangInfo.winner_broadcast.replace("%team%", RestTeam.getTeamName()), "MCMéxico 2018",10,70,20);
+                        Bukkit.broadcastMessage(LangInfo.winner_broadcast.replace("%team%", RestTeam.getTeamName()));
+                    }
                 } else {
                     for (Player p : RestTeam.getPlayers()) {
                         p.sendMessage(LangInfo.lose_message);
                         Sounds.playLose(p);
                     }
                 }
-                
+                // Makes countdown to
                 new BukkitRunnable() {
-                    int count = 20;
+                    int count = ConfigInfo.getShutdownCountdown();
                     @Override                    
                     public void run() {
-                        if (count == 20 ){
-                            Bukkit.broadcastMessage(LangInfo.serverrestart_message);
+                        if (count == ConfigInfo.getShutdownCountdown() ){
+                            Bukkit.broadcastMessage(LangInfo.serverrestart_message.replaceAll("%t", String.valueOf(ConfigInfo.getShutdownCountdown())));
                         }
                         if (count <6 && count >0) {
                             Bukkit.broadcastMessage("§cRestarting in " + count);
@@ -190,7 +221,7 @@ public class Game {
                         count--;
                         if (count==0) {
                             Bukkit.getServer().shutdown();
-                            Bukkit.broadcastMessage("§4Bye bye, losers!");
+                            Bukkit.broadcastMessage("§4Gracias por testear con nosotros!");
                         }
                     }
                 }.runTaskTimer(Main.getPlugin(Main.class), 0, 20);
@@ -201,8 +232,9 @@ public class Game {
             // Establece el juego como estado "esperando"
             state = GameState.WAITING;
             // Crea boss bar
-            WaitingBar = Bukkit.createBossBar(LangInfo.needmoreplayers_bar.replace("%n",String.valueOf(
+            Bar = Bukkit.createBossBar(LangInfo.needmoreplayers_bar.replace("%n",String.valueOf(
                        ConfigInfo.getMaxPlayers() - Bukkit.getOnlinePlayers().size())), BarColor.BLUE, BarStyle.SOLID, BarFlag.DARKEN_SKY);
+            
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -214,14 +246,15 @@ public class Game {
                     
                 }
             }.runTaskTimer(Main.getPlugin(Main.class), 0, 600);
+            
         }
 
 	public static GameState getGameState() {
 		return state;
 	}
 	
-        public static BossBar getWaitingBossBar() {
-            return WaitingBar;
+        public static BossBar getBossBar() {
+            return Bar;
         }
 	
 }

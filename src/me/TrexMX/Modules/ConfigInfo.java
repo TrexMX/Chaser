@@ -6,7 +6,7 @@ public class ConfigInfo {
 
 	
 	private static String gameWorldName,lobbyWorldName,spawnLocation,bossTeamName, restTeamName;
-	private static int maxPlayers,gameDuration;
+	private static int maxPlayers,gameDuration,shutdownCountdown;
 	
 	
 	public static void loadServerInfo() {
@@ -17,7 +17,9 @@ public class ConfigInfo {
 		gameDuration = LoadConfig.getConfig().getInt("gameDuration");
                 bossTeamName = LoadConfig.getConfig().getString("BossTeamName");
                 restTeamName = LoadConfig.getConfig().getString("RestPlayersTeamName");
-		Main.getInstance().getLogger().info("Server config loaded");
+                shutdownCountdown = LoadConfig.getConfig().getInt("shutdownCountdown");
+                Main.getInstance().getLogger().info("Server config loaded");
+
 	}
 	
 	public static int getMaxPlayers() {
@@ -46,5 +48,9 @@ public class ConfigInfo {
         
         public static String getRestTeamName() {
             return restTeamName;
+        }
+        
+        public static int getShutdownCountdown() {
+            return shutdownCountdown;
         }
 }

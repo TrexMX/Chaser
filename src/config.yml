@@ -4,8 +4,9 @@ restPlayers: 3
 bossPlayers: 1
 # GameDuration in seconds
 gameDuration: 120
+shutdownCountdown: 30
 LobbyWorld: 'lobby'
 spawnLocation: '0,4,0'
 GameWorld: 'arena'
-BossTeamName: 'Boss'
-RestPlayersTeamName: 'Rest'
+BossTeamName: 'chaser mamalon'
+RestPlayersTeamName: 'bola de jotos'

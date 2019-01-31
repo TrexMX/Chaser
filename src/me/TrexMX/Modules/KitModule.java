@@ -4,6 +4,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import me.TrexMX.Main.Main;
 import me.TrexMX.Teams.BossTeam;
+import me.TrexMX.Teams.RestTeam;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryType;
 
@@ -31,6 +32,7 @@ public class KitModule {
 			item = new ItemStack(material, amount);
 			Inventory RestKitInventory = Main.getInstance().getServer().createInventory(null, InventoryType.PLAYER);
 			RestKitInventory.setItem(slot, item);
+                        RestTeam.setKit(RestKitInventory);
                         
                         
 		}

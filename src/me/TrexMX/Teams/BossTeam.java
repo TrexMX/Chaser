@@ -1,5 +1,6 @@
 package me.TrexMX.Teams;
 
+import java.util.List;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffect;
@@ -9,7 +10,7 @@ public class BossTeam {
     private static Player boss;
     private static String name;
     private static Inventory kit;
-    private static PotionEffect[] BossEffects;
+    private static List<PotionEffect> BossEffects;
     private static boolean winners;
 
     
@@ -30,7 +31,7 @@ public class BossTeam {
         BossTeam.kit = kit;
     }
     
-    public static void setBossEffects(PotionEffect[] effects) {
+    public static void setBossEffects(List<PotionEffect> effects) {
         BossEffects  = effects;
     }
     
@@ -50,7 +51,7 @@ public class BossTeam {
         return winners;
     } 
     
-    public static PotionEffect[] getBossEffects() {
+    public static List<PotionEffect> getBossEffects() {
         return BossEffects;
     }
 }
